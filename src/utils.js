@@ -22,8 +22,32 @@ function setNodeJsEnv() {
     // eslint-disable-next-line import/no-dynamic-require
     compiler = require(compilerName)
     runJs = filePath => {
+        try {
+            const tsFilePath = `${filePath}.ts`
+            // eslint-disable-next-line no-bitwise
+            fs.accessSync(tsFilePath, fs.constants.R_OK | fs.constants.W_OK)
+            // eslint-disable-next-line import/no-dynamic-require
+            require(tsFilePath)
+        } catch (e) {
+            // eslint-disable-next-line import/no-dynamic-require
+            require(filePath)
+        }
+        // fs.access(tsFilePath, (err) => {
+        //     if (!err) {
+        //         // eslint-disable-next-line import/no-dynamic-require
+        //         require(tsFilePath)
+        //     } else {
+        //         // eslint-disable-next-line import/no-dynamic-require
+        //         require(filePath)
+        //     }
+        //     delete require.cache[require.resolve(filePath)]
+        // })
+        // if (fs.access(tsFilePath)) {
+        //     // eslint-disable-next-line import/no-dynamic-require
+        //     require(tsFilePath)
+        // }
         // eslint-disable-next-line import/no-dynamic-require
-        require(filePath)
+        // require(filePath)
         delete require.cache[require.resolve(filePath)]
     }
 }
